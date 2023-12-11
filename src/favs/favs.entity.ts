@@ -1,19 +1,16 @@
-import { Album } from 'src/albums/album.entity';
-import { Artist } from 'src/artists/artist.entity';
-import { Track } from 'src/tracks/track.entity';
-import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 
 @Entity()
 export class Favs {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
-  @ManyToOne(() => Artist, { nullable: true })
-  artist: Artist;
+  @Column('uuid', { array: true, nullable: true })
+  artists: string[];
 
-  @ManyToOne(() => Album, { nullable: true })
-  album: Album;
+  @Column('uuid', { array: true, nullable: true })
+  albums: string[];
 
-  @ManyToOne(() => Track, { nullable: true })
-  track: Track;
+  @Column('uuid', { array: true, nullable: true })
+  tracks: string[];
 }

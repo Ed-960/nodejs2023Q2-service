@@ -1,8 +1,5 @@
 import { Controller, Get, Post, Delete, Param } from '@nestjs/common';
 import { FavsService } from './favs.service';
-import { Artist } from 'src/artists/artist.entity';
-import { Album } from 'src/albums/album.entity';
-import { Track } from 'src/tracks/track.entity';
 
 @Controller('favs')
 export class FavsController {
@@ -10,14 +7,14 @@ export class FavsController {
 
   @Get()
   async getFavs(): Promise<{
-    artists: Artist[];
-    albums: Album[];
-    tracks: Track[];
+    artists: string[];
+    albums: string[];
+    tracks: string[];
   }> {
-    return this.favsService.getFavs();
+    return this.favsService.getAllFavs();
   }
 
-  @Post('artist/:id')
+  @Post('artist:id')
   async addArtistToFavs(@Param('id') id: string): Promise<void> {
     await this.favsService.addFavs('artist', id);
   }
@@ -42,7 +39,7 @@ export class FavsController {
     await this.favsService.addFavs('track', id);
   }
 
-  @Delete('album/:id')
+  @Delete('track/:id')
   async removeTrackFromFavs(@Param('id') id: string): Promise<void> {
     await this.favsService.removeFavs('track', id);
   }

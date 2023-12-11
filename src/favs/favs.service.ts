@@ -26,20 +26,32 @@ export class FavsService {
     private albumRepository: Repository<Album>,
   ) {}
 
-  async getFavs(): Promise<{
-    artists: Artist[];
-    albums: Album[];
-    tracks: Track[];
-  }> {
-    const favs = await this.favsRepository.find({
-      relations: ['artist', 'album', 'track'],
-    });
+  async getAllFavs() {
+    const favsArray = await this.favsRepository.find();
 
-    const artists = favs.map((fav) => fav.artist).filter(Boolean) as Artist[];
-    const albums = favs.map((fav) => fav.album).filter(Boolean) as Album[];
-    const tracks = favs.map((fav) => fav.track).filter(Boolean) as Track[];
+    if (!favsArray) {
+      return {
+        artists: [],
+        albums: [],
+        tracks: [],
+      };
+    }
 
-    return { artists, albums, tracks };
+    const favs = favsArray[0];
+
+    if (!favs.artists) {
+      favs.artists = [];
+    }
+
+    if (!favs.albums) {
+      favs.albums = [];
+    }
+
+    if (!favs.tracks) {
+      favs.tracks = [];
+    }
+
+    return favs;
   }
 
   async addFavs(type: 'artist' | 'album' | 'track', id: string): Promise<void> {
@@ -55,7 +67,23 @@ export class FavsService {
       throw new NotFoundException(`Entity ${type} not found`);
     }
 
-    await this.favsRepository.save({ [type]: entity });
+    const favs = await this.getAllFavs();
+
+    switch (type) {
+      case 'artist':
+        favs.artists.push(id);
+        break;
+      case 'album':
+        favs.albums.push(id);
+        break;
+      case 'track':
+        favs.tracks.push(id);
+        break;
+      default:
+        throw new BadRequestException('Invalid entity type');
+    }
+
+    await this.favsRepository.save(favs);
   }
 
   async removeFavs(
