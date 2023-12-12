@@ -9,6 +9,7 @@ import { validate as isValidUUID } from 'uuid';
 import { Artist } from 'src/artists/artist.entity';
 import { Track } from './track.entity';
 import { Album } from 'src/albums/album.entity';
+import { Favs } from 'src/favs/favs.entity';
 
 @Injectable()
 export class TrackService {
@@ -21,6 +22,9 @@ export class TrackService {
 
     @InjectRepository(Artist)
     private artistRepository: Repository<Artist>,
+
+    @InjectRepository(Favs)
+    private readonly favsRepository: Repository<Favs>,
   ) {}
 
   async getAllTracks(): Promise<Track[]> {
@@ -87,6 +91,14 @@ export class TrackService {
     const track = await this.trackRepository.findOne({
       where: { id: trackId },
     });
+
+    await this.favsRepository
+      .createQueryBuilder()
+      .update(Favs)
+      .set({
+        tracks: () => `array_remove("tracks", '${trackId}')`,
+      })
+      .execute();
 
     if (!track) {
       throw new NotFoundException(`Track with ID ${trackId} not found`);

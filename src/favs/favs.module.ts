@@ -12,4 +12,10 @@ import { Favs } from './favs.entity';
   controllers: [FavsController],
   providers: [FavsService],
 })
-export class FavsModule {}
+export class FavsModule {
+  constructor(private readonly favoritesService: FavsService) {}
+
+  async onModuleInit() {
+    await this.favoritesService.toInit();
+  }
+}

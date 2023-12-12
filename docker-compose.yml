@@ -1,33 +1,30 @@
-version: '3.9'
+version: '3.0'
 
 services:
   nestapp:
     container_name: home-library
     image: ed/home-library:1.0.0
-    build: .
+    build:
+      context: .
+    env_file:
+      - .env
     ports:
-      - '3000:3000'
-    environment:
-      - DB_TYPE=postgres
-      - PG_HOST=db
-      - PG_USER=postgres
-      - PG_PASSWORD=postgres
-      - PG_DB=postgres
-      - PG_PORT=5432
+      - '4000:4000'
+    command: npm run start:prod
     depends_on:
       - db
-
+    restart: always
   db:
     container_name: db
-    image: postgres:16
+    image: postgres:latest
+    env_file:
+      - .env
+    environment:
+      PG_DATA: /var/lib/postgresql/data
     ports:
       - '5432:5432'
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
-
+    restart: always
 volumes:
-  pgdata: {}
+  pgdata:

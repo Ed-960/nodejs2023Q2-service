@@ -15,4 +15,3 @@ module.exports = {
     migrationsDir: 'src/migrations',
   },
 };
-  

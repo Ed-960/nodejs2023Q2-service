@@ -8,6 +8,8 @@ import { Repository } from 'typeorm';
 import { validate as isValidUUID } from 'uuid';
 import { Album } from './album.entity';
 import { Artist } from 'src/artists/artist.entity';
+import { Favs } from 'src/favs/favs.entity';
+import { Track } from 'src/tracks/track.entity';
 
 @Injectable()
 export class AlbumService {
@@ -17,6 +19,12 @@ export class AlbumService {
 
     @InjectRepository(Artist)
     private readonly artistRepository: Repository<Artist>,
+
+    @InjectRepository(Favs)
+    private readonly favsRepository: Repository<Favs>,
+
+    @InjectRepository(Track)
+    private readonly trackRepository: Repository<Track>,
   ) {}
 
   async getAllAlbums(): Promise<Album[]> {
@@ -78,6 +86,21 @@ export class AlbumService {
     if (!album) {
       throw new NotFoundException(`Album with ID ${albumId} not found`);
     }
+
+    await this.trackRepository
+      .createQueryBuilder()
+      .update(Track)
+      .set({ albumId: null })
+      .where('albumId = :albumId', { albumId })
+      .execute();
+
+    await this.favsRepository
+      .createQueryBuilder()
+      .update(Favs)
+      .set({
+        albums: () => `array_remove("artists", '${albumId}')`,
+      })
+      .execute();
 
     await this.albumRepository.remove(album);
   }

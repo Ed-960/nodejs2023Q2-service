@@ -3,14 +3,14 @@ import { Entity, PrimaryColumn, Column } from 'typeorm';
 @Entity()
 export class Favs {
   @PrimaryColumn()
-  id: string;
+  id: string = 'favs';
 
-  @Column('uuid', { array: true, nullable: true })
+  @Column('text', { array: true, default: [] })
   artists: string[];
 
-  @Column('uuid', { array: true, nullable: true })
+  @Column('text', { array: true, default: [] })
   albums: string[];
 
-  @Column('uuid', { array: true, nullable: true })
+  @Column('text', { array: true, default: [] })
   tracks: string[];
 }
