@@ -1,73 +1,70 @@
-# Home Library Service
 
-## Prerequisites
+REST Service
+Introduction
+Welcome to the Home Library Service project! This repository contains a REST service that allows users to manage their home library, including information about artists, tracks, albums, and favorites. This README provides details on the project structure, API endpoints, and instructions for running the service.
 
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+Project Structure
+The project is organized into separate modules for better maintainability:
 
-## Downloading
+src/app - Application logic
+controllers - Request handlers for each resource
+services - Business logic services
+models - Data models for entities
+middlewares - Custom middleware functions
+src/config - Configuration files
+src/routes - Route definitions for each resource
+src/utils - Utility functions
+test - Unit and integration tests
+API Endpoints
+The REST service provides the following endpoints for each resource:
 
-```
-git clone {repository URL}
-```
+Users
+GET /user - Get all users
+GET /user/:id - Get a single user by ID
+POST /user - Create a new user
+PUT /user/:id - Update a user's password
+DELETE /user/:id - Delete a user
+Tracks
+GET /track - Get all tracks
+GET /track/:id - Get a single track by ID
+POST /track - Create a new track
+PUT /track/:id - Update track information
+DELETE /track/:id - Delete a track
+Artists
+GET /artist - Get all artists
+GET /artist/:id - Get a single artist by ID
+POST /artist - Create a new artist
+PUT /artist/:id - Update artist information
+DELETE /artist/:id - Delete an artist
+Albums
+GET /album - Get all albums
+GET /album/:id - Get a single album by ID
+POST /album - Create a new album
+PUT /album/:id - Update album information
+DELETE /album/:id - Delete an album
+Favorites
+GET /favs - Get all favorites (artists, albums, tracks)
+POST /favs/track/:id - Add a track to favorites
+DELETE /favs/track/:id - Remove a track from favorites
+POST /favs/album/:id - Add an album to favorites
+DELETE /favs/album/:id - Remove an album from favorites
+POST /favs/artist/:id - Add an artist to favorites
+DELETE /favs/artist/:id - Remove an artist from favorites
+Getting Started
+Follow these steps to run the service:
 
-## Installing NPM modules
+Install Node.js (version 18 LTS).
 
-```
-npm install
-```
+Create a .env file with the following content:
 
-## Running application
-
-```
-npm start
-```
-
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
-
-## Testing
-
-After application running open new terminal and enter:
-
-To run all tests without authorization
-
-```
-npm run test
-```
-
-To run only one of all test suites
-
-```
-npm run test -- <path to suite>
-```
-
-To run all test with authorization
-
-```
-npm run test:auth
-```
-
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
-```
-
-### Auto-fix and format
-
-```
-npm run lint
-```
-
-```
-npm run format
-```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
-readme is ok
+ ```env
+   PORT=4000
+   DATABASE_URL=postgresql://username:password@localhost:5432/database
+    "npm i" - to install all the packages
+    "start": "npm run serve:mock",
+    "serve": "node scripts/start.js",
+    "serve:mock": "npm run serve -- --env.config mock",
+    "serve:dev": "npm run serve -- --env.config epam/config_dev.js",
+    "serve:ast:dev": "npm run serve -- --env.config ast/config_qa.js",
+    "server:prod": "http-server ./dist",
+    "build": "node scripts/build.js",
